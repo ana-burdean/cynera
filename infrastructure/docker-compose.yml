@@ -1,0 +1,21 @@
+services:
+
+  postgres:
+    image: postgres:18
+    container_name: cynera-postgres
+
+    environment:
+      POSTGRES_DB: cynera
+      POSTGRES_USER: cynera
+      POSTGRES_PASSWORD: 1234
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - cynera-postgres-data:/var/lib/postgresql
+
+    restart: unless-stopped
+
+volumes:
+  cynera-postgres-data:
