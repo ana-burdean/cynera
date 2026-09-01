@@ -3,7 +3,7 @@ spring:
     name: cynera-backend
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/cynera
+    url: jdbc:postgresql://localhost:5433/cynera
     username: cynera
     password: 1234
 
