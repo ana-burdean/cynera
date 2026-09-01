@@ -1,5 +1,7 @@
 package com.cynera.backend.event.service;
 
+import com.cynera.backend.detection.dto.DetectionResponse;
+import com.cynera.backend.detection.service.DetectionService;
 import com.cynera.backend.event.dto.EventRequest;
 import com.cynera.backend.event.dto.EventResponse;
 import com.cynera.backend.event.entity.SecurityEvent;
@@ -13,9 +15,14 @@ import java.util.List;
 public class EventService {
 
     private final SecurityEventRepository securityEventRepository;
+    private final DetectionService detectionService;
 
-    public EventService(SecurityEventRepository securityEventRepository) {
+    public EventService(
+            SecurityEventRepository securityEventRepository,
+            DetectionService detectionService
+    ) {
         this.securityEventRepository = securityEventRepository;
+        this.detectionService = detectionService;
     }
 
     @Transactional
@@ -30,6 +37,8 @@ public class EventService {
         );
 
         SecurityEvent savedEvent = securityEventRepository.save(event);
+
+        detectionService.evaluateEvent(savedEvent);
 
         return EventResponse.from(savedEvent);
     }
