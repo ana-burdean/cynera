@@ -1,6 +1,5 @@
 package com.cynera.backend.event.service;
 
-import com.cynera.backend.detection.dto.DetectionResponse;
 import com.cynera.backend.detection.service.DetectionService;
 import com.cynera.backend.event.dto.EventRequest;
 import com.cynera.backend.event.dto.EventResponse;
