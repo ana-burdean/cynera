@@ -1,7 +1,7 @@
-package com.cynera.backend.controller;
+package com.cynera.backend.health.controller;
 
-import com.cynera.backend.dto.HealthResponse;
-import com.cynera.backend.service.HealthService;
+import com.cynera.backend.health.dto.HealthResponse;
+import com.cynera.backend.health.service.HealthService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

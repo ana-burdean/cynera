@@ -1,6 +1,6 @@
-package com.cynera.backend.service;
+package com.cynera.backend.health.service;
 
-import com.cynera.backend.dto.HealthResponse;
+import com.cynera.backend.health.dto.HealthResponse;
 import org.springframework.stereotype.Service;
 
 @Service

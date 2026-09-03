@@ -1,4 +1,4 @@
-package com.cynera.backend.dto;
+package com.cynera.backend.health.dto;
 
 public record HealthResponse(
         String status,

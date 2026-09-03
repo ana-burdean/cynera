@@ -1,0 +1,116 @@
+{
+  "info": {
+    "name": "Cynera API",
+    "description": "Postman collection for the Cynera lightweight Endpoint Detection and Response backend.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "POST Create Event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timestamp\": \"2026-09-02T12:00:00Z\",\n  \"eventType\": \"PROCESS_CREATED\",\n  \"hostname\": \"DESKTOP-01\",\n  \"username\": \"ana\",\n  \"processName\": \"powershell.exe\",\n  \"parentProcessName\": \"explorer.exe\"\n}"
+            },
+            "url": "http://localhost:8080/api/v1/events"
+          }
+        },
+        {
+          "name": "GET All Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/events"
+          }
+        },
+        {
+          "name": "POST Failed Login 1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timestamp\": \"2026-09-02T12:00:00Z\",\n  \"eventType\": \"FAILED_LOGIN\",\n  \"hostname\": \"DESKTOP-01\",\n  \"username\": \"ana\",\n  \"processName\": null,\n  \"parentProcessName\": null\n}"
+            },
+            "url": "http://localhost:8080/api/v1/events"
+          }
+        },
+        {
+          "name": "POST Failed Login 2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timestamp\": \"2026-09-02T12:02:00Z\",\n  \"eventType\": \"FAILED_LOGIN\",\n  \"hostname\": \"DESKTOP-01\",\n  \"username\": \"ana\",\n  \"processName\": null,\n  \"parentProcessName\": null\n}"
+            },
+            "url": "http://localhost:8080/api/v1/events"
+          }
+        },
+        {
+          "name": "POST Failed Login 3",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timestamp\": \"2026-09-02T12:04:00Z\",\n  \"eventType\": \"FAILED_LOGIN\",\n  \"hostname\": \"DESKTOP-01\",\n  \"username\": \"ana\",\n  \"processName\": null,\n  \"parentProcessName\": null\n}"
+            },
+            "url": "http://localhost:8080/api/v1/events"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Detections",
+      "item": [
+        {
+          "name": "GET All Detections",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/detections"
+          }
+        }
+      ]
+    },
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "GET Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/actuator/health"
+          }
+        }
+      ]
+    }
+  ]
+}
