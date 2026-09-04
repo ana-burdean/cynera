@@ -8,6 +8,7 @@ public record AgentResponse(
         Long id,
         String agentName,
         String hostname,
+        String agentToken,
         boolean enabled,
         Instant registeredAt
 ) {
@@ -17,6 +18,7 @@ public record AgentResponse(
                 agent.getId(),
                 agent.getAgentName(),
                 agent.getHostname(),
+                agent.getAgentToken(),
                 agent.isEnabled(),
                 agent.getRegisteredAt()
         );

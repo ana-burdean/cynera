@@ -1,5 +1,6 @@
 package com.cynera.backend.auth.security;
 
+import com.cynera.backend.agent.security.AgentAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,11 +16,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AgentAuthenticationFilter agentAuthenticationFilter;
 
     public SecurityConfig(
-            JwtAuthenticationFilter jwtAuthenticationFilter
+            JwtAuthenticationFilter jwtAuthenticationFilter,
+            AgentAuthenticationFilter agentAuthenticationFilter
     ) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.agentAuthenticationFilter = agentAuthenticationFilter;
     }
 
     @Bean
@@ -32,6 +36,15 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
+                        )
+                )
+                .exceptionHandling(exception ->
+                        exception.authenticationEntryPoint(
+                                (request, response, authException) ->
+                                        response.sendError(
+                                                401,
+                                                "Unauthorized"
+                                        )
                         )
                 )
                 .authorizeHttpRequests(auth -> auth
@@ -47,6 +60,10 @@ public class SecurityConfig {
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
+                )
+                .addFilterBefore(
+                        agentAuthenticationFilter,
+                        JwtAuthenticationFilter.class
                 );
 
         return http.build();
