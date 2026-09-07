@@ -26,13 +26,29 @@ public class EventService {
 
     @Transactional
     public EventResponse ingestEvent(EventRequest request) {
+
         SecurityEvent event = new SecurityEvent(
                 request.timestamp(),
                 request.eventType(),
                 request.hostname(),
                 request.username(),
                 request.processName(),
-                request.parentProcessName()
+                request.parentProcessName(),
+                request.filePath(),
+                request.fileAction(),
+                request.fileSize(),
+                request.fileHash(),
+                request.remoteAddress(),
+                request.remotePort(),
+                request.networkProtocol(),
+                request.registryPath(),
+                request.registryAction(),
+                request.registryValueName(),
+                request.registryValueData(),
+                request.windowsEventChannel(),
+                request.windowsEventId(),
+                request.windowsEventProvider(),
+                request.windowsEventMessage()
         );
 
         SecurityEvent savedEvent = securityEventRepository.save(event);
