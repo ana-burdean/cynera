@@ -1,7 +1,5 @@
-package com.cynera.backend.auth;
+package com.cynera.backend.auth.integration;
 
-import com.cynera.backend.auth.dto.LoginRequest;
-import com.cynera.backend.auth.dto.RegisterRequest;
 import com.cynera.backend.auth.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
