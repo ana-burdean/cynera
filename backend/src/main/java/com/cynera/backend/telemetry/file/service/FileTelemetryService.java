@@ -2,7 +2,7 @@ package com.cynera.backend.telemetry.file.service;
 
 import com.cynera.backend.agent.dto.AgentEventRequest;
 import com.cynera.backend.agent.service.AgentEventService;
-import com.cynera.backend.agent.dto.FileTelemetry;
+import com.cynera.backend.telemetry.file.dto.FileTelemetry;
 import com.cynera.backend.event.dto.EventIngestionResponse;
 import org.springframework.stereotype.Service;
 

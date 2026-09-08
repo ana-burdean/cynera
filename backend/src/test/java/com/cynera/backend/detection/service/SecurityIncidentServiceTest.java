@@ -4,6 +4,7 @@ import com.cynera.backend.detection.entity.Detection;
 import com.cynera.backend.detection.entity.SecurityIncident;
 import com.cynera.backend.detection.model.RiskScore;
 import com.cynera.backend.detection.model.Severity;
+import com.cynera.backend.detection.ransomware.PreventionService;
 import com.cynera.backend.detection.repository.SecurityIncidentRepository;
 import com.cynera.backend.event.entity.SecurityEvent;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +19,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SecurityIncidentServiceTest {
@@ -29,13 +31,17 @@ class SecurityIncidentServiceTest {
     @Mock
     private RiskAggregator riskAggregator;
 
+    @Mock
+    private PreventionService preventionService;
+
     private SecurityIncidentService securityIncidentService;
 
     @BeforeEach
     void setUp() {
         securityIncidentService = new SecurityIncidentService(
                 securityIncidentRepository,
-                riskAggregator
+                riskAggregator,
+                preventionService
         );
     }
 
@@ -71,20 +77,9 @@ class SecurityIncidentServiceTest {
                         List.of(detection)
                 );
 
-        assertEquals(
-                "DESKTOP-01",
-                result.getHostname()
-        );
-
-        assertEquals(
-                "ana",
-                result.getUsername()
-        );
-
-        assertEquals(
-                RiskScore.HIGH,
-                result.getRiskScore()
-        );
+        assertEquals("DESKTOP-01", result.getHostname());
+        assertEquals("ana", result.getUsername());
+        assertEquals(RiskScore.HIGH, result.getRiskScore());
 
         verify(riskAggregator)
                 .aggregate(List.of(Severity.HIGH));
@@ -155,6 +150,83 @@ class SecurityIncidentServiceTest {
     }
 
     @Test
+    void shouldPassDetectionEventToPreventionServiceForCriticalIncident() {
+        SecurityEvent event = new SecurityEvent(
+                Instant.parse("2026-09-02T10:00:00Z"),
+                "FILE_MODIFIED",
+                "WIN-HOST",
+                "ana",
+                "ransomware.exe",
+                "explorer.exe",
+                "C:\\important.encrypted",
+                "MODIFIED",
+                1024L,
+                "hash"
+        );
+
+        Detection detection = new Detection(
+                event,
+                "RANSOMWARE_FILE_ENCRYPTION",
+                Severity.CRITICAL,
+                "Ransomware detected",
+                Instant.parse("2026-09-02T10:00:01Z")
+        );
+
+        when(riskAggregator.aggregate(List.of(Severity.CRITICAL)))
+                .thenReturn(RiskScore.CRITICAL);
+
+        when(securityIncidentRepository.save(any(SecurityIncident.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        SecurityIncident result =
+                securityIncidentService.createIncident(
+                        "WIN-HOST",
+                        "ana",
+                        List.of(detection)
+                );
+
+        ArgumentCaptor<List<DetectionMatch>> captor =
+                ArgumentCaptor.forClass(List.class);
+
+        verify(preventionService)
+                .handleCriticalRansomwareIncident(
+                        any(SecurityIncident.class),
+                        captor.capture()
+                );
+
+        List<DetectionMatch> matches = captor.getValue();
+
+        assertEquals(1, matches.size());
+
+        DetectionMatch match = matches.get(0);
+
+        assertEquals(
+                Severity.CRITICAL,
+                match.severity()
+        );
+
+        assertEquals(
+                "RANSOMWARE_FILE_ENCRYPTION",
+                match.rule()
+        );
+
+        assertEquals(
+                "Ransomware detected",
+                match.description()
+        );
+
+        assertEquals(
+                event,
+                match.event()
+        );
+
+        assertEquals(
+                result,
+                result
+        );
+    }
+
+    @Test
     void shouldPassCorrectHostAndUserToIncident() {
         SecurityEvent event = new SecurityEvent(
                 Instant.parse("2026-09-02T10:00:00Z"),
@@ -176,11 +248,11 @@ class SecurityIncidentServiceTest {
         when(riskAggregator.aggregate(List.of(Severity.HIGH)))
                 .thenReturn(RiskScore.HIGH);
 
-        ArgumentCaptor<SecurityIncident> captor =
-                ArgumentCaptor.forClass(SecurityIncident.class);
-
         when(securityIncidentRepository.save(any(SecurityIncident.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
+
+        ArgumentCaptor<SecurityIncident> captor =
+                ArgumentCaptor.forClass(SecurityIncident.class);
 
         securityIncidentService.createIncident(
                 "SERVER-01",

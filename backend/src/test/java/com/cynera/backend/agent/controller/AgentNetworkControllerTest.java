@@ -1,8 +1,8 @@
 package com.cynera.backend.agent.controller;
 
-import com.cynera.backend.agent.service.AgentService;
-import com.cynera.backend.auth.security.JwtService;
-import com.cynera.backend.auth.service.UserService;
+import com.cynera.backend.agent.security.AgentAuthenticationFilter;
+import com.cynera.backend.auth.security.JwtAuthenticationFilter;
+
 import com.cynera.backend.event.dto.EventIngestionResponse;
 import com.cynera.backend.telemetry.network.dto.NetworkTelemetry;
 import com.cynera.backend.telemetry.network.service.NetworkTelemetryService;
@@ -35,13 +35,10 @@ class AgentNetworkControllerTest {
     private NetworkTelemetryService networkTelemetryService;
 
     @MockitoBean
-    private AgentService agentService;
+    private AgentAuthenticationFilter agentAuthenticationFilter;
 
     @MockitoBean
-    private JwtService jwtService;
-
-    @MockitoBean
-    private UserService userService;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Test
     void shouldAcceptNetworkTelemetry() throws Exception {

@@ -1,6 +1,6 @@
 package com.cynera.backend.agent.controller;
 
-import com.cynera.backend.agent.dto.FileTelemetry;
+import com.cynera.backend.telemetry.file.dto.FileTelemetry;
 import com.cynera.backend.event.dto.EventIngestionResponse;
 import com.cynera.backend.telemetry.file.service.FileTelemetryService;
 import jakarta.validation.Valid;

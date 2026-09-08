@@ -6,6 +6,7 @@ spring:
     url: jdbc:postgresql://localhost:5433/cynera
     username: cynera
     password: 1234
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:

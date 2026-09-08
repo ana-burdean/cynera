@@ -1,9 +1,9 @@
 package com.cynera.backend.agent.controller;
 
-import com.cynera.backend.agent.dto.FileTelemetry;
-import com.cynera.backend.agent.service.AgentService;
-import com.cynera.backend.auth.security.JwtService;
-import com.cynera.backend.auth.service.UserService;
+import com.cynera.backend.agent.security.AgentAuthenticationFilter;
+import com.cynera.backend.auth.security.JwtAuthenticationFilter;
+
+import com.cynera.backend.telemetry.file.dto.FileTelemetry;
 import com.cynera.backend.event.dto.EventIngestionResponse;
 import com.cynera.backend.telemetry.file.service.FileTelemetryService;
 import org.junit.jupiter.api.Test;
@@ -32,13 +32,10 @@ class AgentFileControllerTest {
     private FileTelemetryService fileTelemetryService;
 
     @MockitoBean
-    private AgentService agentService;
+    private AgentAuthenticationFilter agentAuthenticationFilter;
 
     @MockitoBean
-    private JwtService jwtService;
-
-    @MockitoBean
-    private UserService userService;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Test
     void shouldIngestFileTelemetry() throws Exception {
